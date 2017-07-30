@@ -1,0 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'QuickStart'
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.google.api-client:google-api-client:1.22.0'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.22.0'
+    compile 'com.google.apis:google-api-services-sheets:v4-rev481-1.22.0'
+	compile group: 'com.google.cloud', name: 'google-cloud-pubsub', version: '0.20.1-beta'    
+	compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
+}

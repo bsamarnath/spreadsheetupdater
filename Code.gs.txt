@@ -1,0 +1,41 @@
+var TOPIC = "projects/extreme-braid-174817/topics/amaraf";
+var SUBSCRIPTION = "projects/extreme-braid-174817/subscriptions/avvv1";
+function onEdit(e)
+{
+  var url = "https://pubsub.googleapis.com/v1/"+TOPIC+":publish";
+  var range = e.range;
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getActiveSheet();
+  var cell = sheet.getActiveCell();
+  Logger.log("cell is " + cell.getRow());
+  var value = e.value;
+  Logger.log("value is " + value);
+  var msg = cell + " " + value;
+  var options = {
+				 method:"POST",
+                 headers:{"Authorization": "Bearer "+ pubsubService().getAccessToken()},
+                 muteHttpExceptions:true,
+                 contentType:"application/json",
+                 message: {
+					"data": msg,
+					"message_id": "136969346945"
+					},
+				"subscription": SUBSCRIPTION
+				}
+  var results = UrlFetchApp.fetch(url, options);  
+  Logger.log(results);
+}
+
+function pubsubService() {
+  return OAuth2.createService('My First Project')
+      .setAuthorizationBaseUrl('https://accounts.google.com/o/oauth2/auth')
+      .setTokenUrl('https://accounts.google.com/o/oauth2/token')
+      .setClientId('216149401941-eu6mhj6jit22fk203daa73an5te6fm7k.apps.googleusercontent.com')
+      .setClientSecret('0iUU7ZWtkncrHiD0mTv5wLHy')
+      .setCallbackFunction('authCallback')
+      .setPropertyStore(PropertiesService.getScriptProperties())
+      .setScope('https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/pubsub https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/spreadsheets')
+      .setParam('login_hint', Session.getActiveUser().getEmail())
+      .setParam('access_type', 'offline')
+      .setParam('approval_prompt', 'auto');
+}
